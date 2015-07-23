@@ -39,11 +39,12 @@ def dfs(graph, u, prev=None, visited=None):
 
     visited[u] = True
     for v in graph[u]:
-        if v != prev and visited[v]:
-            return True
-        else:
-            if dfs(graph, v, u, visited):
+        if v != prev:
+            if visited[v]:
                 return True
+            else:
+                if dfs(graph, v, u, visited):
+                    return True
     return False
 
 
@@ -61,7 +62,14 @@ def dfs(graph, u, state=None):
             is_cyclic = True
             break
         elif state[v] == WHITE:
-            dfs(graph, v, state)
+            if dfs(graph, v, state):
+                is_cyclic = True
+                break
+        # Можно сократить до:
+        # if state[v] == GRAY or state[v] == WHITE and dfs(graph, v, state):
+        #     is_cyclic = True
+        #     break
+        
 
     state[u] = BLACK
     return is_cyclic
